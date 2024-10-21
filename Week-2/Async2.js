@@ -28,16 +28,32 @@ setTimeoutPromisified(1000).then(function () {
     });
   });
   
-//ALT syntax
+//ALT syntax (Promise Chaining)
 setTimeoutPromisified(1000)
   .then(function () {
-    console.log("hi");
+    console.log("1 Second");
     return setTimeoutPromisified(3000);
   })
   .then(function () {
-    console.log("hello");
+    console.log("3 Seconds");
     return setTimeoutPromisified(5000);
   })
   .then(function () {
-    console.log("hello there");
+    console.log("5 Seconds");
   });
+
+  function setTimeoutPromisified(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+  
+  //Async-Await
+  async function solve() {
+    await setTimeoutPromisified(1000);
+    console.log("hi1");
+    await setTimeoutPromisified(3000);
+    console.log("hello2");
+    await setTimeoutPromisified(5000);
+    console.log("hi there3");
+  }
+  
+  solve();
