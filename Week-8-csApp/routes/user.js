@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const {SECRET_KEY_USER} = require("../constants")
 
 const { userModel } = require("../models/user");
+const {userMiddleware} = require("../middlewares/user");
 
 const { Router } = require("express");
 const userRouter = Router();
@@ -71,10 +72,8 @@ userRouter.post("/signin", async (req, res) => {
     }
 })
 
-userRouter.get("/purchases", (req, res) => {
-    res.json({
-        messsage: "Working"
-    })
+userRouter.get("/purchases",userMiddleware,async (req, res) => {
+    const userId = req.userId;
 })
 
 module.exports = {

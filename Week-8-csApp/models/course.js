@@ -6,7 +6,7 @@ const Course = mongoose.Schema({
     description:String,
     price:Number,
     imageURL:String,
-    creatorID :ObjectId
+    creatorId :ObjectId
 })
 
 const courseModel =mongoose.model("course",Course);
