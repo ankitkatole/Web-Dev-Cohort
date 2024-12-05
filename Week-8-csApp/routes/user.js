@@ -2,10 +2,12 @@ const express = require("express");
 const { z } = require("zod");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const {SECRET_KEY_USER} = require("../constants")
+const { SECRET_KEY_USER } = require("../constants")
 
 const { userModel } = require("../models/user");
-const {userMiddleware} = require("../middlewares/user");
+const { purchaseModel } = require("../models/purchase");
+const { courseModel } = require("../models/course");
+const { userMiddleware } = require("../middlewares/user");
 
 const { Router } = require("express");
 const userRouter = Router();
@@ -52,15 +54,15 @@ userRouter.post("/signup", async (req, res) => {
 })
 
 userRouter.post("/signin", async (req, res) => {
-    const {email,password} = req.body;
+    const { email, password } = req.body;
 
-    const admin = await userModel.findOne({
-        email:email
+    const user = await userModel.findOne({
+        email: email
     })
 
     const passwordMatch = await bcrypt.compare(password, user.password);
-    console.log(admin)
-    if (admin && passwordMatch) {
+    console.log(user)
+    if (user && passwordMatch) {
         const token = jwt.sign({ id: user._id.toString() }, SECRET_KEY_USER);
         res.json({
             token
@@ -72,8 +74,18 @@ userRouter.post("/signin", async (req, res) => {
     }
 })
 
-userRouter.get("/purchases",userMiddleware,async (req, res) => {
+userRouter.get("/purchases", userMiddleware, async (req, res) => {
     const userId = req.userId;
+    const purchases = await purchaseModel.find({
+        userId : userId
+    })
+    const coursesData = await courseModel.find({
+        _id: { $in: purchases.map(x => x.courseId) }
+    });
+    res.status(202).json({
+        message:"Data Fetched",
+        courses:coursesData
+    })
 })
 
 module.exports = {
