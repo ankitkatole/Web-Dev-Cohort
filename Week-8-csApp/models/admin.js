@@ -13,7 +13,7 @@ const Admin = new mongoose.Schema({
     courseID:ObjectId
 })
 
-const adminModel = mongoose.model('admin',User);
+const adminModel = mongoose.model('admin',Admin);
 module.exports={
     adminModel
 }

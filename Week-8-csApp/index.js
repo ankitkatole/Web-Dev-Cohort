@@ -6,6 +6,9 @@ const {PORT} = require("./constants")
 const app = express();
 const {connectDB} = require("./db/connection")
 
+
+app.use(express.json());
+
 //Connecting to DB
 connectDB();
 

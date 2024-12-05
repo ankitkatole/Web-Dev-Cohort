@@ -1,4 +1,5 @@
 const {Router} = require("express");
+const {courseModel} = require("../models/course");
 const courseRouter = Router();
 
 courseRouter.get("/", (req, res) => {
