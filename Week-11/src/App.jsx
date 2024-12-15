@@ -1,35 +1,34 @@
 import { useState } from 'react'
 import './App.css'
+import { usePostTitle, useFetch } from './hooks/useFetch'
+import { usePrev } from './hooks/usePrev'
 
-function useCounter(){
-  const [count, setCount] = useState(0)
-  function increaseCount(){ setCount(count + 1) }
-  return{
-    count,increaseCount
-  }
-}
 
 function App() {
-  const {count,increaseCount} = useCounter();
-
+  const postTitle = usePostTitle();
+  const [currentPost, setCurrentPost] = useState(1);
+  const { data, loading } = useFetch(`https://jsonplaceholder.typicode.com/posts/${currentPost}`);
+  const [count, setCount] = useState(0);
+  const prevCount = usePrev(count);
   return (
     <>
-      <Counter /><br />
-      <Counter /><br />
-      <Counter /><br />
-      <Counter /><br />
+      <button onClick={() => setCurrentPost(1)}>1</button><br /><br />
+      <button onClick={() => setCurrentPost(2)}>2</button><br /><br />
+      <button onClick={() => setCurrentPost(3)}>3</button><br /><br />
+      <button onClick={() => setCurrentPost(4)}>4</button><br /><br />
+      {postTitle}<br /><br />
+      {loading ? "Loading..." : JSON.stringify(data)}
+      <br /><br />
+      <div style={{ textAlign: 'center', marginTop: '50px' }}>
+        <h1>Counter with usePrev Hook</h1>
+        <p>Current Count: {count}</p>
+        <p>Previous Count: {prevCount}</p>
+        <button onClick={() => setCount(count + 1)}>Increment</button>
+        <button onClick={() => setCount(count - 1)} style={{ marginLeft: '10px' }}>Decrement</button>
+      </div>
     </>
   )
 }
 
-function Counter(){
-  const {count,increaseCount} = useCounter();
-
-  return(
-    <div>
-      <button onClick={increaseCount}>Increase {count}</button>
-    </div>
-  )
-}
 
 export default App
