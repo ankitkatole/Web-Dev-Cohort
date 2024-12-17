@@ -1,19 +1,49 @@
 // import { networkAtom,jobsAtom,messagingAtom,notificationAtom,totalSelector } from './atoms';
-import { RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import { notifications, totalNotificationSelector } from './atoms'
-import { useEffect } from 'react'
-import axios from 'axios'
+// import { RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+// import { notifications, totalNotificationSelector } from './atoms'
+// import { useEffect } from 'react'
+// import axios from 'axios'
+// import './App.css'
+
+
+//Atom Family
 import './App.css'
+import { RecoilRoot, useRecoilState } from 'recoil';
+import { todosAtomFamily } from './atoms';
+
+
 
 function App() {
   return <RecoilRoot>
-    <MainApp />
+    <Todo id={1}/>
+    <Todo id={2} />
   </RecoilRoot>
 }
 
-function MainApp() {
-  const [networkCount, setNetworkCount] = useRecoilState(notifications)
-  const totalNotificationCount = useRecoilValue(totalNotificationSelector);
+function Todo({id}) {
+   const [todo, setTodo] = useRecoilState(todosAtomFamily(id));
+
+  return (
+    <>
+      {todo.title}
+      {todo.description}
+      <br />
+    </>
+  )
+}
+
+
+
+//Dynamic Queries
+// function App() {
+//   return <RecoilRoot>
+//     <MainApp />
+//   </RecoilRoot>
+// }
+
+// function MainApp() {
+//   const [networkCount, setNetworkCount] = useRecoilState(notifications)
+//   const totalNotificationCount = useRecoilValue(totalNotificationSelector);
 
   // useEffect(() => {
     // fetch but this is noob way
@@ -23,19 +53,19 @@ function MainApp() {
   //     })
   // }, [])
 
-  return (
-    <div>
-      <button>Home</button>
+//   return (
+//     <div>
+//       <button>Home</button>
       
-      <button>My network ({networkCount.network >= 100 ? "99+" : networkCount.network})</button>
-      <button>Jobs ({networkCount.jobs})</button>
-      <button>Messaging ({networkCount.messaging})</button>
-      <button>Notifications ({networkCount.notifications})</button>
+//       <button>My network ({networkCount.network >= 100 ? "99+" : networkCount.network})</button>
+//       <button>Jobs ({networkCount.jobs})</button>
+//       <button>Messaging ({networkCount.messaging})</button>
+//       <button>Notifications ({networkCount.notifications})</button>
 
-      <button>Me ({totalNotificationCount})</button>
-    </div>
-  )
-}
+//       <button>Me ({totalNotificationCount})</button>
+//     </div>
+//   )
+// }
 
 // const App = () => {
 //   return <div>

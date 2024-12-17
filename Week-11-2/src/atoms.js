@@ -1,4 +1,15 @@
-import {atom, selector} from 'recoil';
+import { atomFamily } from "recoil";
+import { TODOS } from "./todos";
+
+export const todosAtomFamily = atomFamily({
+  key: 'todosAtomFamily',
+  default: id => {
+    return TODOS.find(x => x.id === id)
+  },
+});
+
+
+// import {atom, selector} from 'recoil';
 
 // export const networkAtom = atom({
 //     key:"networdAtom",
@@ -28,25 +39,25 @@ import {atom, selector} from 'recoil';
 // })
 
 
-export const notifications = atom({
-    key: "networkAtom",
-    default:selector({
-        key:"networkAtomSelector",
-        get: async()=>{
-            const response = await fetch("https://67604f996be7889dc35d8df0.mockapi.io/nav/nav");
-            const data = await response.json();
-            return data[0];
-        }
-    })
-});
+// export const notifications = atom({
+//     key: "networkAtom",
+//     default:selector({
+//         key:"networkAtomSelector",
+//         get: async()=>{
+//             const response = await fetch("https://67604f996be7889dc35d8df0.mockapi.io/nav/nav");
+//             const data = await response.json();
+//             return data[0];
+//         }
+//     })
+// });
 
-export const totalNotificationSelector = selector({
-    key: "totalNotificationSelector",
-    get: ({get}) => {
-        const allNotifications = get(notifications);
-        return allNotifications.network + 
-        allNotifications.jobs + 
-        allNotifications.notifications + 
-        allNotifications.messaging
-    }
-})
+// export const totalNotificationSelector = selector({
+//     key: "totalNotificationSelector",
+//     get: ({get}) => {
+//         const allNotifications = get(notifications);
+//         return allNotifications.network + 
+//         allNotifications.jobs + 
+//         allNotifications.notifications + 
+//         allNotifications.messaging
+//     }
+// })
