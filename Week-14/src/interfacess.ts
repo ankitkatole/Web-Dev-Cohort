@@ -89,4 +89,72 @@ class Boss extends User2{
 const boss = new Boss('John');
 // console.log(boss.greet());
 
+interface Userr{
+    name:string;
+    age:number;
+}
+
+function sum(user1:Userr,user2:Userr):number{
+    return user1.age + user2.age;
+}
+
+const user1 = {name:'John', age:25};
+const user2 = {name:'Doe', age:30};
+
+// console.log(sum(user1,user2));
+
+interface Customer{
+    id:string;
+    name:string;
+    age:number;
+    email:string;
+    password:string;
+}
+
+type UpdateProps = Pick<Customer, 'name' | 'age' | 'email'>
+
+type updatedCustomer = Partial<Customer>
+
+type Userprops = {
+    readonly id:number;
+    readonly name:string;
+    readonly age:number;
+}
+
+const userprops:Userprops = {
+    id:1,
+    name:'John',
+    age:25
+}
+
+// userprops.age = 30; // Error: Cannot assign to 'age' because it is a read-only property
+
+
+type UserData= {
+    id: string;
+    username: string;
+}
+
+type UsersData={
+    [key:string]:UserData;
+}
+
+const usersData:UsersData = {
+    'user1':{
+        id:'1',
+        username:'John'
+    },
+    'user2':{
+        id:'2',
+        username:'Doe'
+    }
+}
+
+//Records in Typescript
+type UsersData2 = Record<string,UserData>;//typescript specific concept
+
+//Maps 
+let myMap = new Map<number,string>();//Javascript Concept
+myMap.set(1,'John');
+myMap.set(2,'Doe');
 
