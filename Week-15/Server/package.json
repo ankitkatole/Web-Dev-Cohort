@@ -4,17 +4,24 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc -b",
+    "start": "node dist/index.js",
+    "dev": "nodemon --watch src --exec \"npm run build && node dist/index.js\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/express": "^5.0.1",
     "@types/jsonwebtoken": "^9.0.9",
+    "bcrypt": "^5.1.1",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.13.2",
     "typescript": "^5.8.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
   }
 }
