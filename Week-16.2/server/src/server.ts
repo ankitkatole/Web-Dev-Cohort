@@ -2,34 +2,41 @@ import { WebSocketServer, WebSocket } from 'ws';
 
 const wss = new WebSocketServer({ port: 8080 });
 
-let userCount = 0;
-let allSockets: WebSocket[] = [];
-let allMessages = [];
-
+let allSockets: { socket: WebSocket; room: string; username: string }[] = [];
 
 wss.on('connection', (ws) => {
-    allSockets.push(ws);
-    userCount++;
-    console.log('Client connected User#:', userCount);
+  ws.on('message', (message) => {
+    const parsedMessage = JSON.parse(message.toString());
 
-    ws.on('message', (message) => {
-        console.log(`Received message: ${message.toString()}`);
-        for (const socket of allSockets) {
-            socket.send(message.toString()+` Users`); 
+    if (parsedMessage.type === 'join') {
+      allSockets.push({
+        socket: ws,
+        room: parsedMessage.payload.roomId,
+        username: parsedMessage.payload.username
+      });
 
-            //Continue From 39:00 in cohort
+      ws.send(JSON.stringify({ system: true, message: `Welcome, ${parsedMessage.payload.username}!` }));
+    }
 
-        }
-        allMessages.push(message.toString());
-    });
+    if (parsedMessage.type === 'chat') {
+      const sender = allSockets.find(user => user.socket === ws);
+      if (!sender) return;
 
-    ws.on('close', () => {
-        console.log('Client disconnected');
-        userCount--;
-        if (userCount === 0) {
-            console.log('No clients connected');
-        }
-    });
+      const roomUsers = allSockets.filter(user => user.room === sender.room);
+      const outgoingMessage = {
+        username: sender.username,
+        message: parsedMessage.payload.message
+      };
+
+      roomUsers.forEach(user => {
+        user.socket.send(JSON.stringify(outgoingMessage));
+      });
+    }
+  });
+
+  ws.on('close', () => {
+    allSockets = allSockets.filter(user => user.socket !== ws);
+  });
 });
 
 console.log('WebSocket server is running on ws://localhost:8080');
